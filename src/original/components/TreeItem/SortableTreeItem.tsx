@@ -1,19 +1,33 @@
-import React, {CSSProperties} from 'react';
-import type {UniqueIdentifier} from '@dnd-kit/core';
-import {AnimateLayoutChanges, useSortable} from '@dnd-kit/sortable';
-import {CSS} from '@dnd-kit/utilities';
+import React, { CSSProperties } from 'react';
+import { AnimateLayoutChanges, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
-import {TreeItem, Props as TreeItemProps} from './TreeItem';
-import {iOS} from '../../utilities';
+import { TreeItem, Props as TreeItemProps } from './TreeItem';
+import { iOS } from '../../utilities';
+import { UniqueIdentifier } from '@dnd-kit/core';
 
+const animateLayoutChanges: AnimateLayoutChanges = ({ isSorting, wasDragging }) =>
+  isSorting || wasDragging ? false : true;
+
+
+/**
+ * Properties expected by the SortableTreeItem component.
+ */
 interface Props extends TreeItemProps {
+  /**
+   * Unique identifier for the item that we're representing here.
+   */
   id: UniqueIdentifier;
 }
 
-const animateLayoutChanges: AnimateLayoutChanges = ({isSorting, wasDragging}) =>
-  isSorting || wasDragging ? false : true;
 
-export function SortableTreeItem({id, depth, ...props}: Props) {
+/**
+ * A smart component for representing an item in the tree-view.
+ * 
+ * Uses the `useSortable` dnd-kit hook to create the item and renders
+ * the TreeItem with provided data.
+ */
+export function SortableTreeItem({ id, depth, ...props }: Props) {
   const {
     attributes,
     isDragging,
@@ -27,6 +41,7 @@ export function SortableTreeItem({id, depth, ...props}: Props) {
     id,
     animateLayoutChanges,
   });
+
   const style: CSSProperties = {
     transform: CSS.Translate.toString(transform),
     transition,
