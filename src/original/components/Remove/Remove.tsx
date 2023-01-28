@@ -2,6 +2,13 @@ import React from 'react';
 
 import {Action, ActionProps} from '../Action';
 
+
+/**
+ * The button that is used to remove an item from the tree.
+ * 
+ * We customize the active (pressed) status to apear
+ * reddish.
+ */
 export function Remove(props: ActionProps) {
   return (
     <Action
