@@ -117,14 +117,11 @@ const Example = () => {
 /**
  * The page showcasing the original example with minimal changes.
  */
-export const OriginalPage = () => {
-
-    return (
-        <Controller>
-            <AppLayout
-                example={<Example />}
-                controls={<Controls />}
-            />
-        </Controller>
-    )
-}
+export const OriginalPage = () => (
+    <Controller>
+        <AppLayout
+            example={<Example />}
+            controls={<Controls />}
+        />
+    </Controller>
+)
