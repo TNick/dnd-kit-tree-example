@@ -1,0 +1,99 @@
+/*
+Borrowed from https://codingscape.info/simple-navigation-menu-bar/
+*/
+:root {
+    --primary: #112d4e;
+    --secondary: #3f72af;
+    --white: #dbe2ef;
+}
+
+
+.appHeader {
+    display: flex;
+    position: relative;
+}
+
+.appHeader .navbar {
+    background: var(--primary);
+    width: 100%;
+    padding: 10px 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.appHeader .navbar h2 {
+    color: #fafbfc;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+.navbar ul {
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.navbar-links li {
+    list-style: none;
+    display: inline-block;
+    position: relative;
+}
+
+.navbar-links li a {
+    text-decoration: none;
+    color: #fafbfc;
+    margin: 0px 20px;
+}
+
+.navbar ul li:hover {
+    transform: scale(1.02);
+}
+
+.navbar-links i {
+    font-size: 14px;
+    padding: 4px;
+}
+
+/*-- Submenu ---*/
+.navbar .nav-sub-menu {
+    position: absolute;
+    background: var(--primary);
+    margin-left: 0px;
+    top: 36px;
+    padding: 6px 0px;
+    display: none;
+    border-radius: 4px;
+}
+
+.navbar .nav-sub-menu li {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+    left: 0;
+    justify-content: left;
+    white-space: nowrap;
+    padding: 4px 0px;
+}
+
+.navbar .nav-sub-menu li a {
+    line-height: 36px;
+    font-size: 14px;
+    margin-left: 0%;
+    padding: 8px 10px;
+}
+
+.navbar .nav-sub-menu li:hover {
+    line-height: 36px;
+    font-size: 14px;
+    margin-left: 0%;
+    background: var(--secondary);
+}
+
+.navbar .nav-sub-menu.active {
+    display: block;
+}
+
+.logo a {
+    color: white;
+}
