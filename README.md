@@ -15,7 +15,7 @@ self-contained example.
 I think this is how you shoud write your examples, by the way,
 to be didactic; DRY has no place in examples.
 
-##Examples
+## Examples
 
 ### original
 
