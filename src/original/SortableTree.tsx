@@ -36,7 +36,7 @@ import {
 } from './utilities';
 import type {FlattenedItem, SensorContext, TreeItems} from './types';
 import {sortableTreeKeyboardCoordinates} from './keyboardCoordinates';
-import {SortableTreeItem} from './components';
+import {SortableTreeItem} from './components/TreeItem';
 import {CSS} from '@dnd-kit/utilities';
 
 const initialItems: TreeItems = [
@@ -119,9 +119,9 @@ export function SortableTree({
     overId: UniqueIdentifier;
   } | null>(null);
 
-  const flattenedItems = useMemo(() => {
+  const flattenedItems: FlattenedItem[] = useMemo(() => {
     const flattenedTree = flattenTree(items);
-    const collapsedItems = flattenedTree.reduce<string[]>(
+    const collapsedItems = flattenedTree.reduce<UniqueIdentifier[]>(
       (acc, {children, collapsed, id}) =>
         collapsed && children.length ? [...acc, id] : acc,
       []
@@ -205,7 +205,7 @@ export function SortableTree({
           <SortableTreeItem
             key={id}
             id={id}
-            value={id}
+            value={''+id}
             depth={id === activeId && projected ? projected.depth : depth}
             indentationWidth={indentationWidth}
             indicator={indicator}

@@ -1,7 +1,7 @@
 import React, {forwardRef, CSSProperties} from 'react';
 import classNames from 'classnames';
 
-import styles from './Action.module.css';
+import './Action.css';
 
 export interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   active?: {
@@ -17,7 +17,7 @@ export const Action = forwardRef<HTMLButtonElement, Props>(
       <button
         ref={ref}
         {...props}
-        className={classNames(styles.Action, className)}
+        className={classNames('Action', className)}
         tabIndex={0}
         style={
           {

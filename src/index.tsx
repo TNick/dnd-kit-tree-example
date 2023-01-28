@@ -4,8 +4,8 @@ import {
     createBrowserRouter,
     RouterProvider,
   } from "react-router-dom";
-import { MuiPage } from './application/pages/mui';
-import { OriginalPage } from './application/pages/original';
+import { MuiPage } from './application/pages/page-mui';
+import { OriginalPage } from './application/pages/page-original';
 
 
 // our router with one path for each example.
