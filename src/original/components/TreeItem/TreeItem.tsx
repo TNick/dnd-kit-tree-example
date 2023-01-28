@@ -1,28 +1,99 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
 import classNames from 'classnames';
 
-import './TreeItem.css';
 import { Handle } from '../Handle';
 import { Action } from '../Action';
 import { Remove } from '../Remove';
+import './TreeItem.css';
 
+
+/**
+ * Properties expected by the TreeItem component.
+ */
 export interface Props extends Omit<HTMLAttributes<HTMLLIElement>, 'id'> {
+
+  /**
+   * The number of children for this item.
+   */
   childCount?: number;
+
+  /**
+   * Is this a regular item in the list or the floating item
+   * presenting while being dragged?
+   */
   clone?: boolean;
+
+  /**
+   * True if this item has children and the item is collapsed.
+   */
   collapsed?: boolean;
+
+  /**
+   * The nested level (0 based integer).
+   */
   depth: number;
+
+  /**
+   * Interaction is disabled while sorting.
+   */
   disableInteraction?: boolean;
+
+  /**
+   * (used in iOS) Adds the `user-select: none;` style to
+   * the item when true.
+   */
   disableSelection?: boolean;
+
+  /**
+   * True while dragging (the item is fuzzy).
+   */
   ghost?: boolean;
+
+  /**
+   * Properties passed to the handler component.
+   */
   handleProps?: any;
+
+  /**
+   * If true a narrow blue line is shown in place of the item
+   * while dragging. If false a washed-down clone of the item is shown.
+   */
   indicator?: boolean;
+
+  /**
+   * Indentation for nested levels, in pixels.
+   */
   indentationWidth: number;
+
+  /**
+   * The content of the item.
+   */
   value: string;
+
+  /**
+   * Callback triggered by the expand/collapse button.
+   */
   onCollapse?(): void;
+
+  /**
+   * Callback triggered by the remove button.
+   */
   onRemove?(): void;
+
+  /**
+   * Passed to the outermost element of the tree item.
+   */
   wrapperRef?(node: HTMLLIElement): void;
 }
 
+
+/**
+ * A dumb component for representing an item based on the
+ * properties it receives.
+ * 
+ * It is used both to render items in the tree as well as
+ * the item that is being dragged.
+ */
 export const TreeItem = forwardRef<HTMLDivElement, Props>(
   (
     {
@@ -44,47 +115,45 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
       ...props
     },
     ref
-  ) => {
-    return (
-      <li
-        className={classNames(
-          'Wrapper',
-          clone && 'clone',
-          ghost && 'ghost',
-          indicator && 'indicator',
-          disableSelection && 'disableSelection',
-          disableInteraction && 'disableInteraction'
+  ) => (
+    <li
+      className={classNames(
+        'Wrapper',
+        clone && 'clone',
+        ghost && 'ghost',
+        indicator && 'indicator',
+        disableSelection && 'disableSelection',
+        disableInteraction && 'disableInteraction'
+      )}
+      ref={wrapperRef}
+      style={
+        {
+          '--spacing': `${indentationWidth * depth}px`,
+        } as React.CSSProperties
+      }
+      {...props}
+    >
+      <div className="TreeItem" ref={ref} style={style}>
+        <Handle {...handleProps} />
+        {onCollapse && (
+          <Action
+            onClick={onCollapse}
+            className={classNames(
+              'Collapse',
+              collapsed && 'collapsed'
+            )}
+          >
+            {collapseIcon}
+          </Action>
         )}
-        ref={wrapperRef}
-        style={
-          {
-            '--spacing': `${indentationWidth * depth}px`,
-          } as React.CSSProperties
-        }
-        {...props}
-      >
-        <div className="TreeItem" ref={ref} style={style}>
-          <Handle {...handleProps} />
-          {onCollapse && (
-            <Action
-              onClick={onCollapse}
-              className={classNames(
-                'Collapse',
-                collapsed && 'collapsed'
-              )}
-            >
-              {collapseIcon}
-            </Action>
-          )}
-          <span className="Text">{value}</span>
-          {!clone && onRemove && <Remove onClick={onRemove} />}
-          {clone && childCount && childCount > 1 ? (
-            <span className="Count">{childCount}</span>
-          ) : null}
-        </div>
-      </li>
-    );
-  }
+        <span className='Text'>{value}</span>
+        {!clone && onRemove && <Remove onClick={onRemove} />}
+        {clone && childCount && childCount > 1 ? (
+          <span className='Count'>{childCount}</span>
+        ) : null}
+      </div>
+    </li>
+  )
 );
 
 const collapseIcon = (
