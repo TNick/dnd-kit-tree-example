@@ -4,7 +4,7 @@ import {
     Input,
 } from '@mui/material';
 
-import { SortableTree } from "../../original/SortableTree";
+import { SortableTree } from "../../mui/SortableTree";
 import { AppLayout } from "../layout/layout"
 import { Controller, useContextData } from "./common"
 
