@@ -2,6 +2,10 @@ import React, {forwardRef} from 'react';
 
 import {Action, ActionProps} from '../Action';
 
+
+/**
+ * The button used to move the items around.
+ */
 export const Handle = forwardRef<HTMLButtonElement, ActionProps>(
   (props, ref) => {
     return (
