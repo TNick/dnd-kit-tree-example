@@ -216,22 +216,22 @@ export function SortableTree({
     onDragMove({ active, over }) {
       return getMovementAnnouncement(
         'onDragMove',
-        '' + active.id,
-        over ? '' + over.id : undefined
+        active.id,
+        over ? over.id : undefined
       );
     },
     onDragOver({ active, over }) {
       return getMovementAnnouncement(
         'onDragOver',
-        '' + active.id,
-        over ? '' + over.id : undefined
+        active.id,
+        over ? over.id : undefined
       );
     },
     onDragEnd({ active, over }) {
       return getMovementAnnouncement(
         'onDragEnd',
-        '' + active.id,
-        over ? '' + over.id : undefined
+        active.id,
+        over ? over.id : undefined
       );
     },
     onDragCancel({ active }) {
@@ -256,7 +256,7 @@ export function SortableTree({
           <SortableTreeItem
             key={id}
             id={id}
-            value={''+id}
+            value={'' + id}
             depth={id === activeId && projected ? projected.depth : depth}
             indentationWidth={indentationWidth}
             indicator={indicator}
@@ -295,15 +295,15 @@ export function SortableTree({
   // for that sensor happens, along with the unique identifier of
   // the draggable element that was picked up.  
   function handleDragStart({ active: { id: activeId } }: DragStartEvent) {
-    setActiveId('' + activeId);
-    setOverId('' + activeId);
+    setActiveId(activeId);
+    setOverId(activeId);
 
     const activeItem = flattenedItems.find(({ id }) => id === activeId);
 
     if (activeItem) {
       setCurrentPosition({
         parentId: activeItem.parentId,
-        overId: '' + activeId,
+        overId: activeId,
       });
     }
 
@@ -320,7 +320,7 @@ export function SortableTree({
   // Fires when a draggable item is moved over a droppable container,
   // along with the unique identifier of that droppable container.
   function handleDragOver({ over }: DragOverEvent) {
-    setOverId(over ? '' + over.id : null);
+    setOverId(over ? over.id : null);
   }
 
   // Fires after a draggable item is dropped. 

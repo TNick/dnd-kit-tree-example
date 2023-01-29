@@ -31,7 +31,7 @@ export interface Props extends HTMLAttributes<HTMLButtonElement> {
  * 
  * This is the base for other buttons in the application.
  * 
- * Style accepts `--action-background` asvariable for
+ * Style accepts `--action-background` as variable for
  * hover background color customization.
  * 
  */

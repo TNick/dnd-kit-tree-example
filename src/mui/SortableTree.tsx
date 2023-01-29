@@ -217,22 +217,22 @@ export function SortableTree({
     onDragMove({ active, over }) {
       return getMovementAnnouncement(
         'onDragMove',
-        '' + active.id,
-        over ? '' + over.id : undefined
+        active.id,
+        over ? over.id : undefined
       );
     },
     onDragOver({ active, over }) {
       return getMovementAnnouncement(
         'onDragOver',
-        '' + active.id,
-        over ? '' + over.id : undefined
+        active.id,
+        over ? over.id : undefined
       );
     },
     onDragEnd({ active, over }) {
       return getMovementAnnouncement(
         'onDragEnd',
-        '' + active.id,
-        over ? '' + over.id : undefined
+        active.id,
+        over ? over.id : undefined
       );
     },
     onDragCancel({ active }) {
@@ -298,15 +298,15 @@ export function SortableTree({
   // for that sensor happens, along with the unique identifier of
   // the draggable element that was picked up.  
   function handleDragStart({ active: { id: activeId } }: DragStartEvent) {
-    setActiveId('' + activeId);
-    setOverId('' + activeId);
+    setActiveId(activeId);
+    setOverId(activeId);
 
     const activeItem = flattenedItems.find(({ id }) => id === activeId);
 
     if (activeItem) {
       setCurrentPosition({
         parentId: activeItem.parentId,
-        overId: '' + activeId,
+        overId: activeId,
       });
     }
 
@@ -323,7 +323,7 @@ export function SortableTree({
   // Fires when a draggable item is moved over a droppable container,
   // along with the unique identifier of that droppable container.
   function handleDragOver({ over }: DragOverEvent) {
-    setOverId(over ? '' + over.id : null);
+    setOverId(over ? over.id : null);
   }
 
   // Fires after a draggable item is dropped. 
@@ -382,63 +382,78 @@ export function SortableTree({
     );
   }
 
+  // Called from the accessibility.anouncements handlers
   function getMovementAnnouncement(
     eventName: string,
     activeId: UniqueIdentifier,
     overId?: UniqueIdentifier
   ) {
-    if (overId && projected) {
-      if (eventName !== 'onDragEnd') {
-        if (
-          currentPosition &&
-          projected.parentId === currentPosition.parentId &&
-          overId === currentPosition.overId
-        ) {
-          return;
-        } else {
-          setCurrentPosition({
-            parentId: projected.parentId,
-            overId,
-          });
-        }
-      }
-
-      const clonedItems: FlattenedItem[] = JSON.parse(
-        JSON.stringify(flattenTree(items))
-      );
-      const overIndex = clonedItems.findIndex(({ id }) => id === overId);
-      const activeIndex = clonedItems.findIndex(({ id }) => id === activeId);
-      const sortedItems = arrayMove(clonedItems, activeIndex, overIndex);
-
-      const previousItem = sortedItems[overIndex - 1];
-
-      let announcement;
-      const movedVerb = eventName === 'onDragEnd' ? 'dropped' : 'moved';
-      const nestedVerb = eventName === 'onDragEnd' ? 'dropped' : 'nested';
-
-      if (!previousItem) {
-        const nextItem = sortedItems[overIndex + 1];
-        announcement = `${activeId} was ${movedVerb} before ${nextItem.id}.`;
-      } else {
-        if (projected.depth > previousItem.depth) {
-          announcement = `${activeId} was ${nestedVerb} under ${previousItem.id}.`;
-        } else {
-          let previousSibling: FlattenedItem | undefined = previousItem;
-          while (previousSibling && projected.depth < previousSibling.depth) {
-            const parentId: UniqueIdentifier | null = previousSibling.parentId;
-            previousSibling = sortedItems.find(({ id }) => id === parentId);
-          }
-
-          if (previousSibling) {
-            announcement = `${activeId} was ${movedVerb} after ${previousSibling.id}.`;
-          }
-        }
-      }
-
-      return announcement;
+    // Nothing to say, yet.
+    if (!overId || !projected) {
+      return;
     }
 
-    return;
+    // Avoid saying the same thing over and over.
+    if (eventName !== 'onDragEnd') {
+      if (
+        currentPosition &&
+        projected.parentId === currentPosition.parentId &&
+        overId === currentPosition.overId
+      ) {
+        return;
+      } else {
+        setCurrentPosition({
+          parentId: projected.parentId,
+          overId,
+        });
+      }
+    }
+
+    // Deep-clone the items. Create the flat list from tree.
+    const clonedItems: FlattenedItem[] = JSON.parse(
+      JSON.stringify(flattenTree(items))
+    );
+    // Locate the item that is being moved and the one over
+    // which was moved.
+    const overIndex = clonedItems.findIndex(({ id }) => id === overId);
+    const activeIndex = clonedItems.findIndex(({ id }) => id === activeId);
+    // Place the moved item in proper location in flat array.
+    const sortedItems = arrayMove(clonedItems, activeIndex, overIndex);
+    // Get previous item in flat list to use as reference.
+    const previousItem = sortedItems[overIndex - 1];
+
+    let announcement;
+    const movedVerb = eventName === 'onDragEnd' ? 'dropped' : 'moved';
+    const nestedVerb = eventName === 'onDragEnd' ? 'dropped' : 'nested';
+
+    // If this item that was moved becomes the first in the list
+    // we use next item as reference.
+    // TODO: I think that if the item has children this will actually be a child
+    // so not much of a reference. We should locate firs non-child.
+    if (!previousItem) {
+      const nextItem = sortedItems[overIndex + 1];
+      announcement = `${activeId} was ${movedVerb} before ${nextItem.id}.`;
+    } else {
+      // The item before is an ancestor.
+      if (projected.depth > previousItem.depth) {
+        announcement = `${activeId} was ${nestedVerb} under ${previousItem.id}.`;
+      } else {
+        // The item before is not an ancestor so locate previous sibling.
+        let previousSibling: FlattenedItem | undefined = previousItem;
+        while (previousSibling && projected.depth < previousSibling.depth) {
+          const parentId: UniqueIdentifier | null = previousSibling.parentId;
+          previousSibling = sortedItems.find(({ id }) => id === parentId);
+        }
+
+        if (previousSibling) {
+          announcement = `${activeId} was ${movedVerb} after ${previousSibling.id}.`;
+        } else {
+          // TODO: Is this possible? If not, why a conditional?
+        }
+      }
+    }
+
+    return announcement;
   }
 }
 
