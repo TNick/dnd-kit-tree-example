@@ -5,6 +5,10 @@ import './TreeItem.css';
 import { Handle } from '../../../original/components/Handle';
 import { Action } from '../../../original/components/Action';
 import { Remove } from '../../../original/components/Remove';
+import { Wrapper } from './wrapper';
+import { Container } from './container';
+import { Content } from './content';
+import { Badge } from './badge';
 
 
 /**
@@ -116,15 +120,11 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
     },
     ref
   ) => (
-    <li
-      className={classNames(
-        'Wrapper',
-        clone && 'clone',
-        ghost && 'ghost',
-        indicator && 'indicator',
-        disableSelection && 'disableSelection',
-        disableInteraction && 'disableInteraction'
-      )}
+    <Wrapper
+      clone={clone}
+      ghost={ghost}
+      indicator={indicator}
+      disableInteraction={disableInteraction}
       ref={wrapperRef}
       style={
         {
@@ -133,7 +133,13 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
       }
       {...props}
     >
-      <div className="TreeItem" ref={ref} style={style}>
+      <Container
+        clone={clone}
+        ghost={ghost}
+        indicator={indicator}
+        ref={ref}
+        style={style}
+      >
         <Handle {...handleProps} />
         {onCollapse && (
           <Action
@@ -146,13 +152,18 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
             {collapseIcon}
           </Action>
         )}
-        <span className='Text'>{value}</span>
+        <Content
+          className='Text'
+          disableSelection={disableSelection}
+        >
+          {value}
+        </Content>
         {!clone && onRemove && <Remove onClick={onRemove} />}
         {clone && childCount && childCount > 1 ? (
-          <span className='Count'>{childCount}</span>
+          <Badge>{childCount}</Badge>
         ) : null}
-      </div>
-    </li>
+      </Container>
+    </Wrapper>
   )
 );
 

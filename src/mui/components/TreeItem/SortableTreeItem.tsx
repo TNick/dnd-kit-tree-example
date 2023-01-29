@@ -1,9 +1,9 @@
 import React, { CSSProperties } from 'react';
 import { AnimateLayoutChanges, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { UniqueIdentifier } from '@dnd-kit/core';
 
 import { TreeItem, Props as TreeItemProps } from './TreeItem';
-import { UniqueIdentifier } from '@dnd-kit/core';
 import { iOS } from '../../../original/utilities';
 
 const animateLayoutChanges: AnimateLayoutChanges = ({ isSorting, wasDragging }) =>
