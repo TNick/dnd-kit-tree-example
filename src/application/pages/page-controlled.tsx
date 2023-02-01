@@ -50,19 +50,24 @@ const ExampleUi = () => {
     } = useDndTree<TreeItem[], TreeItem>();
 
     return (
-        <List>
-            {flat.map(i => (
-                <SortableTreeItem
-                    key={i.id}
-                    id={i.id}
-                    depth={i.level}
-                    indentationWidth={50}
-                    value={getNodeContent(data, i.source)}
-                    onRemove={() => removeItemFromTree(i.id)}
-                    onCollapse={i.children ? () => setExpandedState(i.id, !i.collapsed) : undefined}
-                />
-            ))}
-        </List>
+        <>
+            <div>
+                This is work in progress.
+            </div>
+            <List>
+                {flat.map(i => (
+                    <SortableTreeItem
+                        key={i.id}
+                        id={i.id}
+                        depth={i.level}
+                        indentationWidth={50}
+                        value={getNodeContent(data, i.source)}
+                        onRemove={() => removeItemFromTree(i.id)}
+                        onCollapse={i.children ? () => setExpandedState(i.id, !i.collapsed) : undefined}
+                    />
+                ))}
+            </List>
+        </>
     )
 }
 
