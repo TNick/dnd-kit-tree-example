@@ -4,21 +4,11 @@ import {
     createBrowserRouter,
     RouterProvider,
   } from "react-router-dom";
-import { MuiPage } from './application/pages/page-mui';
-import { OriginalPage } from './application/pages/page-original';
+import { appPages } from './application/pages';
 
 
 // our router with one path for each example.
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <OriginalPage />,
-    },
-    {
-        path: "/mui",
-        element: <MuiPage />,
-    },
-]);
+const router = createBrowserRouter(appPages);
 
 // Standard React setup.
 const root = ReactDOM.createRoot(

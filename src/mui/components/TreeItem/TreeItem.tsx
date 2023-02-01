@@ -1,4 +1,4 @@
-import React, { forwardRef, HTMLAttributes } from 'react';
+import React, { forwardRef, HTMLAttributes, ReactNode } from 'react';
 import classNames from 'classnames';
 
 import './TreeItem.css';
@@ -72,7 +72,7 @@ export interface Props extends Omit<HTMLAttributes<HTMLLIElement>, 'id'> {
   /**
    * The content of the item.
    */
-  value: string;
+  value: ReactNode;
 
   /**
    * Callback triggered by the expand/collapse button.

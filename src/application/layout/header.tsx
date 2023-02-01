@@ -1,4 +1,6 @@
+import { appBarClasses } from '@mui/material';
 import React from 'react';
+import { appPages } from '../pages';
 import './header.css';
 
 /**
@@ -13,10 +15,11 @@ export const AppHeader = () => (
                 </a>
             </h2>
             <ul className="navbar-links">
-                <li><a href="/">Original</a></li>
-                <li>
-                    <a href="/mui">MUI</a>
-                </li>
+                {appPages.map(p => (
+                    <li key={p.path}>
+                        <a href={p.path}>{p.label}</a>
+                    </li>
+                ))}
                 <li><a href="https://dndkit.com/">dndkit.com</a></li>
             </ul>
         </div>
